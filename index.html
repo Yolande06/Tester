@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 Access Required</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0d1117;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    #gate {
+      text-align: center;
+      max-width: 500px;
+      padding: 40px;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      background: #161b22;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .riddle {
+      margin: 25px 0;
+      padding: 20px;
+      background: #21262d;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      background: #0d1117;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #238636;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2ea043;
+    }
+
+    #message {
+      margin-top: 15px;
+      color: #f85149;
+    }
+
+    #website {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+      padding: 50px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PUZZLE -->
+  <div id="gate">
+    <h1>🔐 Restricted Area</h1>
+
+    <p>Solve the puzzle to continue.</p>
+
+    <div class="riddle">
+      <strong>Riddle:</strong><br><br>
+      I speak without a mouth<br>
+      and hear without ears.<br>
+      I have no body,<br>
+      but I come alive with wind.<br><br>
+      What am I?
+    </div>
+
+    <input
+      id="answer"
+      type="text"
+      placeholder="Enter your answer..."
+      autocomplete="off"
+    >
+
+    <button onclick="checkAnswer()">Enter Website</button>
+
+    <div id="message"></div>
+  </div>
+
+
+  <!-- YOUR WEBSITE -->
+  <div id="website">
+    <h1>🎉 Welcome!</h1>
+
+    <p>You solved the puzzle.</p>
+
+    <!-- Put your actual website here -->
+    <p>This is where your website content goes.</p>
+  </div>
+
+
+  <script>
+    function checkAnswer() {
+      const answer = document
+        .getElementById("answer")
+        .value
+        .trim()
+        .toLowerCase();
+
+      if (answer === "echo") {
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("website").style.display = "block";
+      } else {
+        document.getElementById("message").textContent =
+          "❌ That's not correct. Try again.";
+      }
+    }
+
+    // Allow pressing Enter instead of clicking the button
+    document.getElementById("answer").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkAnswer();
+      }
+    });
+  </script>
+
+</body>
+</html>
