@@ -1,55 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anagram Game</title>
 
-  <title>My Website</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  <link rel="stylesheet" href="style.css">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .game {
+      background: white;
+      color: #222;
+      width: 90%;
+      max-width: 500px;
+      padding: 35px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    #scrambledWord {
+      font-size: 40px;
+      font-weight: bold;
+      letter-spacing: 8px;
+      margin: 30px 0;
+      color: #667eea;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #667eea;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #5568d8;
+    }
+
+    #message {
+      font-size: 18px;
+      font-weight: bold;
+      min-height: 25px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 25px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- PUZZLE SCREEN -->
-  <div id="puzzle-screen">
+  <div class="game">
 
-    <h1>🔐 Solve the Puzzle</h1>
+    <h1>🔤 Anagram Game</h1>
 
-    <p>Unscramble the letters to enter:</p>
+    <p>Unscramble the letters!</p>
 
-    <h2 id="scrambled-word"></h2>
+    <div id="scrambledWord">LOADING</div>
 
     <input
       type="text"
       id="answer"
-      placeholder="Enter your answer"
+      placeholder="Type your answer..."
       autocomplete="off"
     >
 
-    <button onclick="checkAnswer()">UNLOCK</button>
+    <button onclick="checkAnswer()">Submit</button>
+    <button onclick="newWord()">Skip</button>
 
     <p id="message"></p>
 
+    <div class="stats">
+      <div>
+        <strong>Score</strong>
+        <div id="score">0</div>
+      </div>
+
+      <div>
+        <strong>Streak</strong>
+        <div id="streak">0</div>
+      </div>
+    </div>
+
   </div>
 
+  <script>
 
-  <!-- YOUR WEBSITE -->
-  <div id="website" style="display: none;">
+    const words = [
+      "apple",
+      "banana",
+      "computer",
+      "javascript",
+      "elephant",
+      "guitar",
+      "mountain",
+      "rainbow",
+      "chocolate",
+      "adventure",
+      "football",
+      "keyboard",
+      "diamond",
+      "sunshine",
+      "triangle"
+    ];
 
-    <h1>Welcome to My Website</h1>
+    let currentWord = "";
+    let score = 0;
+    let streak = 0;
 
-    <p>Hello! My name is Yolande.</p>
+    function shuffleWord(word) {
 
-    <p>You've solved the puzzle and unlocked my website! 🎉</p>
+      let letters = word.split("");
 
-  </div>
+      for (let i = letters.length - 1; i > 0; i--) {
 
+        const j = Math.floor(Math.random() * (i + 1));
 
-  <script src="script.js"></script>
+        [letters[i], letters[j]] =
+          [letters[j], letters[i]];
+      }
+
+      return letters.join("");
+    }
+
+    function newWord() {
+
+      currentWord =
+        words[Math.floor(Math.random() * words.length)];
+
+      let scrambled = shuffleWord(currentWord);
+
+      // Make sure the scrambled word isn't identical
+      // to the original word.
+      while (scrambled === currentWord) {
+        scrambled = shuffleWord(currentWord);
+      }
+
+      document.getElementById("scrambledWord")
+        .textContent = scrambled.toUpperCase();
+
+      document.getElementById("answer").value = "";
+
+      document.getElementById("message")
+        .textContent = "";
+
+      document.getElementById("answer").focus();
+    }
+
+    function checkAnswer() {
+
+      const answer =
+        document.getElementById("answer")
+          .value
+          .trim()
+          .toLowerCase();
+
+      if (answer === currentWord) {
+
+        score += 10;
+        streak++;
+
+        document.getElementById("score")
+          .textContent = score;
+
+        document.getElementById("streak")
+          .textContent = streak;
+
+        document.getElementById("message")
+          .textContent = "✅ Correct!";
+
+        setTimeout(newWord, 800);
+
+      } else {
+
+        streak = 0;
+
+        document.getElementById("streak")
+          .textContent = streak;
+
+        document.getElementById("message")
+          .textContent = "❌ Try again!";
+      }
+    }
+
+    // Press Enter to submit
+    document.getElementById("answer")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          checkAnswer();
+        }
+
+      });
+
+    // Start the game
+    newWord();
+
+  </script>
 
 </body>
-
 </html>
-```
